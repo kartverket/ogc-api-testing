@@ -1,0 +1,474 @@
+components:
+  parameters:
+    bbox-crs:
+      description: Indicates the EPSG for the given bbox coordinates.
+      explode: false
+      in: query
+      name: bbox-crs
+      required: false
+      schema:
+        default: 4326
+        type: integer
+      style: form
+    f:
+      description: The optional f parameter indicates the output format which the
+        server shall provide as part of the response document.  The default format
+        is GeoJSON.
+      explode: false
+      in: query
+      name: f
+      required: false
+      schema:
+        default: json
+        enum:
+        - json
+        - html
+        - jsonld
+        type: string
+      style: form
+    lang:
+      description: The optional lang parameter instructs the server return a response
+        in a certain language, if supported.  If the language is not among the available
+        values, the Accept-Language header language will be used if it is supported.
+        If the header is missing, the default server language is used. Note that providers
+        may only support a single language (or often no language at all), that can
+        be different from the server language.  Language strings can be written in
+        a complex (e.g. "fr-CA,fr;q=0.9,en-US;q=0.8,en;q=0.7"), simple (e.g. "de")
+        or locale-like (e.g. "de-CH" or "fr_BE") fashion.
+      in: query
+      name: lang
+      required: false
+      schema:
+        default: 'no'
+        enum:
+        - 'no'
+        type: string
+    offset:
+      description: The optional offset parameter indicates the index within the result
+        set from which the server shall begin presenting results in the response document.  The
+        first element has an index of 0 (default).
+      explode: false
+      in: query
+      name: offset
+      required: false
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
+      style: form
+    properties:
+      description: The properties that should be included for each feature. The parameter
+        value is a comma-separated list of property names.
+      explode: false
+      in: query
+      name: properties
+      required: false
+      schema:
+        items:
+          type: string
+        type: array
+      style: form
+    skipGeometry:
+      description: This option can be used to skip response geometries for each feature.
+      explode: false
+      in: query
+      name: skipGeometry
+      required: false
+      schema:
+        default: false
+        type: boolean
+      style: form
+    vendorSpecificParameters:
+      description: Additional "free-form" parameters that are not explicitly defined
+      in: query
+      name: vendorSpecificParameters
+      schema:
+        additionalProperties: true
+        type: object
+      style: form
+  responses:
+    '200':
+      description: successful operation
+    Queryables:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/queryables'
+      description: successful queryables operation
+    default:
+      content:
+        application/json:
+          schema:
+            $ref: https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/exception.yaml
+      description: Unexpected error
+  schemas:
+    queryable:
+      properties:
+        description:
+          description: a human-readable narrative describing the queryable
+          type: string
+        language:
+          default:
+          - en
+          description: the language used for the title and description
+          type: string
+        queryable:
+          description: the token that may be used in a CQL predicate
+          type: string
+        title:
+          description: a human readable title for the queryable
+          type: string
+        type:
+          description: the data type of the queryable
+          type: string
+        type-ref:
+          description: a reference to the formal definition of the type
+          format: url
+          type: string
+      required:
+      - queryable
+      - type
+      type: object
+    queryables:
+      properties:
+        queryables:
+          items:
+            $ref: '#/components/schemas/queryable'
+          type: array
+      required:
+      - queryables
+      type: object
+info:
+  contact:
+    email: tjenestedrift@kartverket.no
+    name: Kartverket
+    url: https://kartverket.no
+  description: "OGC API er en ny generasjon standarder fra Open Geospatial Consortium.\
+    \ P\xE5 denne serveren tilbys to Coverage-tjenester fra Kartverket. Tjenesten\
+    \ er satt opp for testform\xE5l."
+  license:
+    name: CC-BY 4.0 license
+    url: https://creativecommons.org/licenses/by/4.0/
+  termsOfService: https://creativecommons.org/licenses/by/4.0/
+  title: OGC API-tjenester - Kartverket
+  version: 0.13.dev0
+  x-keywords:
+  - Geodata
+  - API
+  - OGC
+openapi: 3.0.2
+paths:
+  /:
+    get:
+      description: Landing page
+      operationId: getLandingPage
+      parameters:
+      - $ref: '#/components/parameters/f'
+      - $ref: '#/components/parameters/lang'
+      responses:
+        '200':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/LandingPage
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Landing page
+      tags:
+      - server
+  /collections:
+    get:
+      description: Collections
+      operationId: getCollections
+      parameters:
+      - $ref: '#/components/parameters/f'
+      - $ref: '#/components/parameters/lang'
+      responses:
+        '200':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/Collections
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Collections
+      tags:
+      - server
+  /collections/dtm-10-terrengmodell:
+    get:
+      description: "Digital terrengmodell over fastlands-Norge med h\xF8yder i et\
+        \ rutenett p\xE5 10 x 10 meter. Terrengmodellen er en rutenettsmodell med\
+        \ oppl\xF8sning (rutenettst\xF8rrelse) p\xE5 10 x 10 meter."
+      operationId: describeDtm-10-terrengmodellCollection
+      parameters:
+      - $ref: '#/components/parameters/f'
+      - $ref: '#/components/parameters/lang'
+      responses:
+        '200':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/Collection
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '404':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Get DTM 10 Terrengmodell (UTM32) metadata
+      tags:
+      - dtm-10-terrengmodell
+  /collections/dtm-10-terrengmodell/coverage:
+    get:
+      description: "Digital terrengmodell over fastlands-Norge med h\xF8yder i et\
+        \ rutenett p\xE5 10 x 10 meter. Terrengmodellen er en rutenettsmodell med\
+        \ oppl\xF8sning (rutenettst\xF8rrelse) p\xE5 10 x 10 meter."
+      operationId: getDtm-10-terrengmodellCoverage
+      parameters:
+      - &id001
+        description: The optional f parameter indicates the output format which the
+          server shall provide as part of the response document.  The default format
+          is GeoJSON.
+        explode: false
+        in: query
+        name: f
+        required: false
+        schema:
+          default: json
+          enum:
+          - json
+          - html
+          - jsonld
+          - csv
+          type: string
+        style: form
+      - &id002
+        description: The optional lang parameter instructs the server return a response
+          in a certain language, if supported.  If the language is not among the available
+          values, the Accept-Language header language will be used if it is supported.
+          If the header is missing, the default server language is used. Note that
+          providers may only support a single language (or often no language at all),
+          that can be different from the server language.  Language strings can be
+          written in a complex (e.g. "fr-CA,fr;q=0.9,en-US;q=0.8,en;q=0.7"), simple
+          (e.g. "de") or locale-like (e.g. "de-CH" or "fr_BE") fashion.
+        in: query
+        name: lang
+        required: false
+        schema:
+          default: 'no'
+          enum:
+          - 'no'
+          type: string
+      - $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/parameters/bbox
+      - $ref: '#/components/parameters/bbox-crs'
+      responses:
+        '200':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/Features
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '404':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Get DTM 10 Terrengmodell (UTM32) coverage
+      tags:
+      - dtm-10-terrengmodell
+  /collections/dtm-10-terrengmodell/coverage/domainset:
+    get:
+      description: "Digital terrengmodell over fastlands-Norge med h\xF8yder i et\
+        \ rutenett p\xE5 10 x 10 meter. Terrengmodellen er en rutenettsmodell med\
+        \ oppl\xF8sning (rutenettst\xF8rrelse) p\xE5 10 x 10 meter."
+      operationId: getDtm-10-terrengmodellCoverageDomainSet
+      parameters:
+      - *id001
+      - *id002
+      responses:
+        '200':
+          $ref: https://raw.githubusercontent.com/tomkralidis/ogcapi-coverages-1/fix-cis/yaml-unresolved/schemas/cis_1.1/domainSet.yaml
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '404':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Get DTM 10 Terrengmodell (UTM32) coverage domain set
+      tags:
+      - dtm-10-terrengmodell
+  /collections/dtm-10-terrengmodell/coverage/rangetype:
+    get:
+      description: "Digital terrengmodell over fastlands-Norge med h\xF8yder i et\
+        \ rutenett p\xE5 10 x 10 meter. Terrengmodellen er en rutenettsmodell med\
+        \ oppl\xF8sning (rutenettst\xF8rrelse) p\xE5 10 x 10 meter."
+      operationId: getDtm-10-terrengmodellCoverageRangeType
+      parameters:
+      - *id001
+      - *id002
+      responses:
+        '200':
+          $ref: https://raw.githubusercontent.com/tomkralidis/ogcapi-coverages-1/fix-cis/yaml-unresolved/schemas/cis_1.1/rangeType.yaml
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '404':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Get DTM 10 Terrengmodell (UTM32) coverage range type
+      tags:
+      - dtm-10-terrengmodell
+  /collections/dybdedata-terrengmodell-50-meters-grid-rogaland:
+    get:
+      description: "Grov terrengmodell i 50 m oppl\xF8sning som viser terrengvariasjon\
+        \ p\xE5 havbunnen for sj\xF8- og havomr\xE5der utenfor Rogaland. Terrengmodellen\
+        \ har blitt generert ved bruk av interpolering og har derfor varierende kvalitet\
+        \ med hensyn til p\xE5litelighet i posisjon og dybde."
+      operationId: describeDybdedata-terrengmodell-50-meters-grid-rogalandCollection
+      parameters:
+      - $ref: '#/components/parameters/f'
+      - $ref: '#/components/parameters/lang'
+      responses:
+        '200':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/Collection
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '404':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Get Dybdedata - terrengmodell 50 meters grid for Rogaland metadata
+      tags:
+      - dybdedata-terrengmodell-50-meters-grid-rogaland
+  /collections/dybdedata-terrengmodell-50-meters-grid-rogaland/coverage:
+    get:
+      description: "Grov terrengmodell i 50 m oppl\xF8sning som viser terrengvariasjon\
+        \ p\xE5 havbunnen for sj\xF8- og havomr\xE5der utenfor Rogaland. Terrengmodellen\
+        \ har blitt generert ved bruk av interpolering og har derfor varierende kvalitet\
+        \ med hensyn til p\xE5litelighet i posisjon og dybde."
+      operationId: getDybdedata-terrengmodell-50-meters-grid-rogalandCoverage
+      parameters:
+      - *id001
+      - *id002
+      - $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/parameters/bbox
+      - $ref: '#/components/parameters/bbox-crs'
+      responses:
+        '200':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/Features
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '404':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Get Dybdedata - terrengmodell 50 meters grid for Rogaland coverage
+      tags:
+      - dybdedata-terrengmodell-50-meters-grid-rogaland
+  /collections/dybdedata-terrengmodell-50-meters-grid-rogaland/coverage/domainset:
+    get:
+      description: "Grov terrengmodell i 50 m oppl\xF8sning som viser terrengvariasjon\
+        \ p\xE5 havbunnen for sj\xF8- og havomr\xE5der utenfor Rogaland. Terrengmodellen\
+        \ har blitt generert ved bruk av interpolering og har derfor varierende kvalitet\
+        \ med hensyn til p\xE5litelighet i posisjon og dybde."
+      operationId: getDybdedata-terrengmodell-50-meters-grid-rogalandCoverageDomainSet
+      parameters:
+      - *id001
+      - *id002
+      responses:
+        '200':
+          $ref: https://raw.githubusercontent.com/tomkralidis/ogcapi-coverages-1/fix-cis/yaml-unresolved/schemas/cis_1.1/domainSet.yaml
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '404':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Get Dybdedata - terrengmodell 50 meters grid for Rogaland coverage
+        domain set
+      tags:
+      - dybdedata-terrengmodell-50-meters-grid-rogaland
+  /collections/dybdedata-terrengmodell-50-meters-grid-rogaland/coverage/rangetype:
+    get:
+      description: "Grov terrengmodell i 50 m oppl\xF8sning som viser terrengvariasjon\
+        \ p\xE5 havbunnen for sj\xF8- og havomr\xE5der utenfor Rogaland. Terrengmodellen\
+        \ har blitt generert ved bruk av interpolering og har derfor varierende kvalitet\
+        \ med hensyn til p\xE5litelighet i posisjon og dybde."
+      operationId: getDybdedata-terrengmodell-50-meters-grid-rogalandCoverageRangeType
+      parameters:
+      - *id001
+      - *id002
+      responses:
+        '200':
+          $ref: https://raw.githubusercontent.com/tomkralidis/ogcapi-coverages-1/fix-cis/yaml-unresolved/schemas/cis_1.1/rangeType.yaml
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '404':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Get Dybdedata - terrengmodell 50 meters grid for Rogaland coverage
+        range type
+      tags:
+      - dybdedata-terrengmodell-50-meters-grid-rogaland
+  /conformance:
+    get:
+      description: API conformance definition
+      operationId: getConformanceDeclaration
+      parameters:
+      - $ref: '#/components/parameters/f'
+      - $ref: '#/components/parameters/lang'
+      responses:
+        '200':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ConformanceDeclaration
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: API conformance definition
+      tags:
+      - server
+  /openapi:
+    get:
+      description: This document
+      operationId: getOpenapi
+      parameters:
+      - $ref: '#/components/parameters/f'
+      - $ref: '#/components/parameters/lang'
+      - description: UI to render the OpenAPI document
+        explode: false
+        in: query
+        name: ui
+        required: false
+        schema:
+          default: swagger
+          enum:
+          - swagger
+          - redoc
+          type: string
+        style: form
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        default:
+          $ref: '#/components/responses/default'
+      summary: This document
+      tags:
+      - server
+servers:
+- description: "OGC API er en ny generasjon standarder fra Open Geospatial Consortium.\
+    \ P\xE5 denne serveren tilbys to Coverage-tjenester fra Kartverket. Tjenesten\
+    \ er satt opp for testform\xE5l."
+  url: http://localhost:5000
+tags:
+- description: "OGC API er en ny generasjon standarder fra Open Geospatial Consortium.\
+    \ P\xE5 denne serveren tilbys to Coverage-tjenester fra Kartverket. Tjenesten\
+    \ er satt opp for testform\xE5l."
+  externalDocs:
+    description: information
+    url: https://example.org
+  name: server
+- description: SpatioTemporal Asset Catalog
+  name: stac
+- description: "Digital terrengmodell over fastlands-Norge med h\xF8yder i et rutenett\
+    \ p\xE5 10 x 10 meter. Terrengmodellen er en rutenettsmodell med oppl\xF8sning\
+    \ (rutenettst\xF8rrelse) p\xE5 10 x 10 meter."
+  name: dtm-10-terrengmodell
+- description: "Grov terrengmodell i 50 m oppl\xF8sning som viser terrengvariasjon\
+    \ p\xE5 havbunnen for sj\xF8- og havomr\xE5der utenfor Rogaland. Terrengmodellen\
+    \ har blitt generert ved bruk av interpolering og har derfor varierende kvalitet\
+    \ med hensyn til p\xE5litelighet i posisjon og dybde."
+  name: dybdedata-terrengmodell-50-meters-grid-rogaland
