@@ -2750,7 +2750,7 @@ class API:
                     'type': FORMAT_TYPES[F_HTML],
                     'rel': 'http://www.opengis.net/def/rel/ogc/1.0/job-list',
                     'href': '{}?f={}'.format(jobs_url, F_HTML),
-                    'title': 'jobs for this process as HTML',
+                    'title': 'Jobs for this process as HTML',
                     'hreflang': self.default_locale
                 }
                 p2['links'].append(link)
@@ -2759,7 +2759,7 @@ class API:
                     'type': FORMAT_TYPES[F_JSON],
                     'rel': 'http://www.opengis.net/def/rel/ogc/1.0/job-list',
                     'href': '{}?f={}'.format(jobs_url, F_JSON),
-                    'title': 'jobs for this process as JSON',
+                    'title': 'Jobs for this process as JSON',
                     'hreflang': self.default_locale
                 }
                 p2['links'].append(link)

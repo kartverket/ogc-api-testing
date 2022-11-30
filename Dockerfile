@@ -1,41 +1,4 @@
-# =================================================================
-#
-# Authors: Tom Kralidis <tomkralidis@gmail.com>
-#          Just van den Broecke <justb4@gmail.com>
-#          Francesco Bartoli <xbartolone@gmail.com>
-#          Angelos Tzotsos <gcpp.kalxas@gmail.com>
-#
-# Copyright (c) 2020 Tom Kralidis
-# Copyright (c) 2019 Just van den Broecke
-# Copyright (c) 2020 Francesco Bartoli
-# Copyright (c) 2021 Angelos Tzotsos
-#
-# Permission is hereby granted, free of charge, to any person
-# obtaining a copy of this software and associated documentation
-# files (the "Software"), to deal in the Software without
-# restriction, including without limitation the rights to use,
-# copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the
-# Software is furnished to do so, subject to the following
-# conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-# OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-# WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-# OTHER DEALINGS IN THE SOFTWARE.
-#
-# =================================================================
-
-FROM ubuntu:focal
-
-LABEL maintainer="Just van den Broecke <justb4@gmail.com>"
+FROM debian:bookworm
 
 # Docker file for full geoapi server with libs/packages for all providers.
 # Server runs with gunicorn. You can override ENV settings.
@@ -108,6 +71,8 @@ ADD . /pygeoapi
 
 COPY ./docker/default.config.yml /pygeoapi/local.config.yml
 COPY ./docker/entrypoint.sh /entrypoint.sh
+
+EXPOSE 80
 
 WORKDIR /pygeoapi
 ENTRYPOINT ["/entrypoint.sh"]

@@ -20,10 +20,10 @@
             <caption>{% trans %}Inputs{% endtrans %}</caption>
             <thead>
             <tr>
-              <th>{% trans %}Id{% endtrans %}</th>
-              <th>{% trans %}Title{% endtrans %}</th>
-              <th>{% trans %}Data Type{% endtrans %}</th>
-              <th>{% trans %}Description{% endtrans %}</th>
+              <th style="width: 11%">{% trans %}Id{% endtrans %}</th>
+              <th style="width: 11%">{% trans %}Title{% endtrans %}</th>
+              <th style="width: 11%">{% trans %}Data Type{% endtrans %}</th>
+              <th style="width: 67%">{% trans %}Description{% endtrans %}</th>
             </tr>
             </thead>
             <tbody>
@@ -51,9 +51,9 @@
             <caption>{% trans %}Outputs{% endtrans %}</caption>
             <thead>
             <tr>
-              <th>{% trans %}Id{% endtrans %}</th>
-              <th>{% trans %}Title{% endtrans %}</th>
-              <th>{% trans %}Description{% endtrans %}</th>
+              <th style="width: 33%">{% trans %}Id{% endtrans %}</th>
+              <th style="width: 33%">{% trans %}Title{% endtrans %}</th>
+              <th style="width: 34%">{% trans %}Description{% endtrans %}</th>
             </tr>
             </thead>
             <tbody>
@@ -74,7 +74,9 @@
             {% if 'async-execute' in data.jobControlOptions %}<li>{% trans %}Asynchronous{% endtrans %}</li>{% endif %}
           </ul>
           <h2>{% trans %}Jobs{% endtrans %}</h2>
-          <a title="Browse jobs" href="{{config.server.url}}/jobs">{% trans %}Browse jobs{% endtrans %}</a>
+          <div class="mb-3">
+            <a title="Browse jobs" href="{{config.server.url}}/jobs">{% trans %}Browse jobs{% endtrans %}</a>
+          </div>
           <h2>{% trans %}Links{% endtrans %}</h2>
           <ul>
             {% for link in data['links'] %}

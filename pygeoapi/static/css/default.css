@@ -69,3 +69,7 @@ mark.failed {
 mark.running {
   background-color: orange;
 }
+
+caption {
+    caption-side: top;
+}

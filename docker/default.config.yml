@@ -30,13 +30,12 @@
 server:
     bind:
         host: 0.0.0.0
-        port: 80
-    url: http://localhost
+        port: 8080
+    url: http://localhost:8080/
     mimetype: application/json; charset=UTF-8
     encoding: utf-8
     gzip: false
     languages:
-        # First language is the default language
         - "no"
     cors: true
     pretty_print: true
@@ -62,7 +61,7 @@ metadata:
         title:
             "no": OGC API-tjenester - Kartverket
         description:
-            "no": OGC API er en ny generasjon standarder fra Open Geospatial Consortium. På denne serveren tilbys to Coverage-tjenester fra Kartverket. Tjenesten er satt opp for testformål.
+            "no": OGC API er en ny generasjon standarder fra Open Geospatial Consortium. På denne serveren tilbys testimplementasjoner av Coverages- og Processes-spesifikasjonene.
         keywords:
             "no":
                 - Geodata
@@ -154,4 +153,9 @@ resources:
               format:
                   name: GTiff
                   mimetype: application/geotiff
+
+    fullstendighetsdekning:
+        type: process
+        processor:
+            name: Fullstendighetsdekning                  
 

@@ -144,8 +144,7 @@ info:
     name: Kartverket
     url: https://kartverket.no
   description: "OGC API er en ny generasjon standarder fra Open Geospatial Consortium.\
-    \ P\xE5 denne serveren tilbys to Coverage-tjenester fra Kartverket. Tjenesten\
-    \ er satt opp for testform\xE5l."
+    \ P\xE5 denne serveren tilbys testimplementasjoner av Coverages- og Processes-spesifikasjonene."
   license:
     name: CC-BY 4.0 license
     url: https://creativecommons.org/licenses/by/4.0/
@@ -448,15 +447,78 @@ paths:
       summary: This document
       tags:
       - server
+  /processes:
+    get:
+      description: Processes
+      operationId: getProcesses
+      parameters:
+      - $ref: '#/components/parameters/f'
+      responses:
+        '200':
+          $ref: https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/responses/ProcessList.yaml
+        default:
+          $ref: '#/components/responses/default'
+      summary: Processes
+      tags:
+      - server
+  /processes/fullstendighetsdekning:
+    get:
+      description: "Tjeneste som viser fullstendighetsdekningen til et utvalg forskjellige\
+        \ datasett, basert p\xE5 et geografisk punkt."
+      operationId: describeFullstendighetsdekningProcess
+      parameters:
+      - $ref: '#/components/parameters/f'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        default:
+          $ref: '#/components/responses/default'
+      summary: Get process metadata
+      tags:
+      - fullstendighetsdekning
+  /processes/fullstendighetsdekning/execution:
+    post:
+      description: "Tjeneste som viser fullstendighetsdekningen til et utvalg forskjellige\
+        \ datasett, basert p\xE5 et geografisk punkt."
+      operationId: executeFullstendighetsdekningJob
+      requestBody:
+        content:
+          application/json:
+            example:
+              inputs:
+                datasets:
+                - dekningkvikkleire
+                - dekninglosmasser
+                geometry:
+                  coordinates:
+                  - 7.1
+                  - 62.69
+                  type: Point
+            schema:
+              $ref: https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/execute.yaml
+        description: Mandatory execute request JSON
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '201':
+          $ref: https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/responses/ExecuteAsync.yaml
+        '404':
+          $ref: https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/responses/NotFound.yaml
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/responses/ServerError.yaml
+        default:
+          $ref: '#/components/responses/default'
+      summary: Process Fullstendighetsdekning execution
+      tags:
+      - fullstendighetsdekning
 servers:
 - description: "OGC API er en ny generasjon standarder fra Open Geospatial Consortium.\
-    \ P\xE5 denne serveren tilbys to Coverage-tjenester fra Kartverket. Tjenesten\
-    \ er satt opp for testform\xE5l."
+    \ P\xE5 denne serveren tilbys testimplementasjoner av Coverages- og Processes-spesifikasjonene."
   url: http://localhost:5000
 tags:
 - description: "OGC API er en ny generasjon standarder fra Open Geospatial Consortium.\
-    \ P\xE5 denne serveren tilbys to Coverage-tjenester fra Kartverket. Tjenesten\
-    \ er satt opp for testform\xE5l."
+    \ P\xE5 denne serveren tilbys testimplementasjoner av Coverages- og Processes-spesifikasjonene."
   externalDocs:
     description: information
     url: https://example.org
@@ -472,3 +534,6 @@ tags:
     \ har blitt generert ved bruk av interpolering og har derfor varierende kvalitet\
     \ med hensyn til p\xE5litelighet i posisjon og dybde."
   name: dybdedata-terrengmodell-50-meters-grid-rogaland
+- description: "Tjeneste som viser fullstendighetsdekningen til et utvalg forskjellige\
+    \ datasett, basert p\xE5 et geografisk punkt."
+  name: fullstendighetsdekning

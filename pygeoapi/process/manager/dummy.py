@@ -31,6 +31,7 @@ import logging
 
 from pygeoapi.process.manager.base import BaseManager
 from pygeoapi.util import JobStatus
+from pprint import pprint
 
 LOGGER = logging.getLogger(__name__)
 
@@ -83,6 +84,7 @@ class DummyManager(BaseManager):
             jfmt, outputs = p.execute(data_dict)
             current_status = JobStatus.successful
         except Exception as err:
+            pprint(err)
             outputs = {
                 'code': 'InvalidParameterValue',
                 'description': 'Error updating job'

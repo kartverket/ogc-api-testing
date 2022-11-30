@@ -1,2 +1,2 @@
-# ogc-api-coverages
-Repository for å teste ut OGC API - Coverages
+# ogc-api-testing
+pygeoapi-implementasjon for å teste ut OGC API-spesifikasjonene Coverages og Processes.

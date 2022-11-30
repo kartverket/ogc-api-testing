@@ -1,0 +1,14 @@
+{
+    "database": {
+        "server": "kartverket-ogc-api.postgres.database.azure.com",
+        "name": "fullstendighetsdekning",
+        "username": "pygeoapi",
+        "password": "eIeV#2WzJz"
+    },
+    "epsg": {
+        "source": 4326,
+        "target": 4258
+    },
+    "layer_name_prefix": "fullstendighetsdekning"
+}
+

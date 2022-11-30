@@ -1,5 +1,6 @@
 wheel
 Babel
+gdal
 click>7,<=9
 Flask
 jsonschema
@@ -7,6 +8,7 @@ pyproj
 python-dateutil
 pytz
 PyYAML
+py_linq
 rasterio
 shapely
 tinydb
