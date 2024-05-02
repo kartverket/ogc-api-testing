@@ -1,0 +1,37 @@
+# nonk8s
+apiVersion: "backstage.io/v1alpha1"
+kind: "Component"
+metadata:
+  name: "ogc-api-testing"
+  tags: []
+spec:
+  type: "experiment"
+  lifecycle: "experiment"
+  owner: "datadeling_og_distribusjon"
+  system: "geonorge"
+---
+apiVersion: "backstage.io/v1alpha1"
+kind: "Group"
+metadata:
+  name: "security_champion_ogc-api-testing"
+  title: "Security Champion ogc-api-testing"
+spec:
+  type: "security_champion"
+  parent: "land_security_champions"
+  members:
+  - "dagolav"
+  children:
+  - "resource:ogc-api-testing"
+---
+apiVersion: "backstage.io/v1alpha1"
+kind: "Resource"
+metadata:
+  name: "ogc-api-testing"
+  links:
+  - url: "https://github.com/kartverket/ogc-api-testing"
+    title: "ogc-api-testing på GitHub"
+spec:
+  type: "repo"
+  owner: "security_champion_ogc-api-testing"
+  dependencyOf:
+  - "component:ogc-api-testing"
